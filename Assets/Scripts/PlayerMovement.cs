@@ -12,7 +12,8 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -22,11 +23,8 @@ public class PlayerMovement : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
 
         Vector3 moveDirection = new Vector3(horizontal, 0.0f, vertical);
-
-        Debug.Log(moveDirection.magnitude + ": 1");
         moveDirection.Normalize();
-        Debug.Log(moveDirection.magnitude + ": 3");
-
+        
         if (moveDirection != Vector3.zero)
         {
             moveDirection = Quaternion.AngleAxis(cam.transform.rotation.eulerAngles.y, Vector3.up) * moveDirection;
