@@ -1,9 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
     GameObject loopingSound;
+    GameObject witchSound;
 
     private void Awake()
     {
@@ -39,6 +43,35 @@ public class SoundManager : MonoBehaviour
 
     public void StopLoopingSound()
     {
+        if (loopingSound)
+            StartCoroutine(FadeOutSound());
+    }
+
+    IEnumerator FadeOutSound()
+    {
+        AudioSource source = loopingSound.GetComponent<AudioSource>();
+
+        while (source && source.volume > 0.0f)
+        {
+            source.volume -= Time.deltaTime;
+            yield return null;
+        }
         Destroy(loopingSound);
+    }
+
+    public void PlayWitchSound(AudioClip clip, Vector3 position)
+    {
+        witchSound = new GameObject(clip.name);
+        AudioSource source = witchSound.AddComponent<AudioSource>();
+        source.loop = true;
+        source.clip = clip;
+        //source.spatialBlend = 1.0f;
+        source.volume = 1.0f;
+        source.Play();
+    }
+
+    public void StopWitchSound()
+    {
+        witchSound.GetComponent<AudioSource>().Stop();
     }
 }

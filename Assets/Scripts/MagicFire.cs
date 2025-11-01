@@ -11,11 +11,12 @@ public class MagicFire : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("Player") && PumpkinSpawner.instance.GetSpawnPumpkin())
         {
             stopPortal = false;
             ps.transform.localScale = new Vector3(4.0f, 4.0f, 4.0f);
             ps.Play();
+            PumpkinSpawner.instance.SpawnWitch();
             StartCoroutine(RunPortal());
             SoundManager.instance.PlaySound(fireIgnite, transform.position, 1.0f);
             SoundManager.instance.PlayLoopingSound(fireSound, transform.position, 1.0f);
@@ -37,6 +38,12 @@ public class MagicFire : MonoBehaviour
         {
             float scaleSpeed = Time.deltaTime * shrinkSpeed;
             ps.transform.localScale -= new Vector3 (scaleSpeed, scaleSpeed, scaleSpeed);
+
+            if(ps.transform.localScale.x <= 0.0f)
+            {
+                PumpkinSpawner.instance.SpawnPumpkin();
+            }
+
             yield return null;
         }
 
