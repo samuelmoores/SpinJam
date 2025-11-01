@@ -7,9 +7,11 @@ public class Witch : MonoBehaviour
     GameObject player;
     Animator animator;
     public ParticleSystem deathSmoke_instance;
+    public ParticleSystem poisonMagic;
     public AudioClip laughSound;
     public AudioClip deathSound;
     bool damaged = false;
+    float damageRadius = 2.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,7 +20,6 @@ public class Witch : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         SoundManager.instance.PlayWitchSound(laughSound, transform.position);
-        Debug.Log(animator);
     }
 
     // Update is called once per frame
@@ -28,16 +29,19 @@ public class Witch : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
-        if (distance < 1.25f && !damaged)
+        if (distance < damageRadius && !damaged)
             player.GetComponent<PlayerMovement>().TakeDamage();
     }
 
     public void TakeDamage()
     {
         agent.isStopped = true;
-        agent.speed -= 0.4f;
+        agent.speed -= 0.3f;
+        damageRadius -= 0.25f;
+        poisonMagic.transform.localScale *= 0.75f;
         SoundManager.instance.StopWitchSound();
         PlayerMovement playerMov = player.GetComponent<PlayerMovement>();
+        poisonMagic.Stop();
 
         playerMov.Heal();
         playerMov.SetPlayerSpeed(50);
@@ -55,6 +59,7 @@ public class Witch : MonoBehaviour
     {
         agent.isStopped = false;
         SoundManager.instance.PlayWitchSound(laughSound, transform.position);
+        poisonMagic.Play();
         damaged = false;
     }
 

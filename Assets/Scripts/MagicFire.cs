@@ -8,6 +8,7 @@ public class MagicFire : MonoBehaviour
     public AudioClip fireIgnite;
     public AudioClip fireSound;
     bool stopPortal = false;
+    public int directionType;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -41,7 +42,7 @@ public class MagicFire : MonoBehaviour
 
             if(ps.transform.localScale.x <= 0.0f)
             {
-                PumpkinSpawner.instance.SpawnPumpkin();
+                PumpkinSpawner.instance.SpawnPumpkin(directionType);
             }
 
             yield return null;

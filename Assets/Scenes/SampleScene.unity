@@ -1233,6 +1233,7 @@ MonoBehaviour:
   shrinkSpeed: 2.5
   fireIgnite: {fileID: 8300000, guid: 97847710d293f3146b19a3c6a4e636f9, type: 3}
   fireSound: {fileID: 8300000, guid: 098efde43b71eb04192693a88ee8ec9c, type: 3}
+  directionType: 1
 --- !u!135 &117248897
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -7489,6 +7490,7 @@ MonoBehaviour:
   shrinkSpeed: 2
   fireIgnite: {fileID: 8300000, guid: 97847710d293f3146b19a3c6a4e636f9, type: 3}
   fireSound: {fileID: 8300000, guid: 098efde43b71eb04192693a88ee8ec9c, type: 3}
+  directionType: 1
 --- !u!4 &1348149839 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4432975863972712, guid: 278e8eacf74c6154ebc173a666e00c27, type: 3}
@@ -8174,6 +8176,7 @@ MonoBehaviour:
   shrinkSpeed: 1.5
   fireIgnite: {fileID: 8300000, guid: 97847710d293f3146b19a3c6a4e636f9, type: 3}
   fireSound: {fileID: 8300000, guid: 098efde43b71eb04192693a88ee8ec9c, type: 3}
+  directionType: 0
 --- !u!135 &1454859237
 SphereCollider:
   m_ObjectHideFlags: 0

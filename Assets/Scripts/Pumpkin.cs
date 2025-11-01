@@ -7,6 +7,7 @@ public class Pumpkin : MonoBehaviour
     Witch witch;
     public Rigidbody rb;
     public ParticleSystem magicSmoke_Instance;
+    public ParticleSystem dustPuff_Instance;
     public AudioClip[] fireworkSounds;
     
 
@@ -47,14 +48,20 @@ public class Pumpkin : MonoBehaviour
 
             Debug.Log(pumpkinExplosionRadius);
 
-            if (pumpkinExplosionRadius < 4.5f)
+            if (pumpkinExplosionRadius < 7.5f)
                 witch.TakeDamage();
         }
 
-        ParticleSystem magicSmoke = Instantiate(magicSmoke_Instance, transform.position, Quaternion.identity);
-        magicSmoke.transform.localScale *= 1.3f;
-        Destroy(magicSmoke, magicSmoke.main.duration);
         SoundManager.instance.PlaySound(fireworkSounds[Random.Range(0, fireworkSounds.Length)], transform.position, 1.0f);
+
+        ParticleSystem magicSmoke = Instantiate(magicSmoke_Instance, transform.position, Quaternion.Euler(Vector3.right * -90));
+        magicSmoke.transform.localScale *= 1.5f;
+
+        ParticleSystem smokePuff = Instantiate(dustPuff_Instance, transform.position, Quaternion.identity);
+        smokePuff.transform.localScale *= 0.75f;
+        Destroy(magicSmoke, magicSmoke.main.duration);
+        Destroy(smokePuff, smokePuff.main.duration);
+
         PumpkinSpawner.instance.CanSpawnPumpkin();
         Destroy(gameObject);
     }

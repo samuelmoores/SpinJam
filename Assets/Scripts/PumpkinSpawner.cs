@@ -28,7 +28,7 @@ public class PumpkinSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnPumpkin()
+    public void SpawnPumpkin(int directionType)
     {
         pumpkinSpawnCount++;
         canSpawnPumpkin = false;

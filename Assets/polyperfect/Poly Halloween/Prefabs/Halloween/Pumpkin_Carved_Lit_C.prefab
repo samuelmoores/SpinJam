@@ -153,6 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 4856269680440679666}
   magicSmoke_Instance: {fileID: 3433532831124342106, guid: 48e196c36363e814bad43a44c92dc11b, type: 3}
+  dustPuff_Instance: {fileID: 5209762585441982612, guid: 803ecf87f61d9fb4f84ba6319ba95c9c, type: 3}
   fireworkSounds:
   - {fileID: 8300000, guid: 3f5257831cca97c40a107abb30b27341, type: 3}
   - {fileID: 8300000, guid: 95bc4b4330e3c5b4cb11dedb5803014b, type: 3}
