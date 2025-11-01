@@ -9,6 +9,7 @@ public class Witch : MonoBehaviour
     public ParticleSystem deathSmoke_instance;
     public AudioClip laughSound;
     public AudioClip deathSound;
+    bool damaged = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,6 +25,11 @@ public class Witch : MonoBehaviour
     void Update()
     {
         agent.destination = player.transform.position;
+
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+
+        if (distance < 1.25f && !damaged)
+            player.GetComponent<PlayerMovement>().TakeDamage();
     }
 
     public void TakeDamage()
@@ -31,17 +37,25 @@ public class Witch : MonoBehaviour
         agent.isStopped = true;
         agent.speed -= 0.4f;
         SoundManager.instance.StopWitchSound();
+        PlayerMovement playerMov = player.GetComponent<PlayerMovement>();
+
+        playerMov.Heal();
+        playerMov.SetPlayerSpeed(50);
 
         if (agent.speed <= 0.0f)
             animator.SetBool("die", true);
         else
+        {
             animator.SetTrigger("damage");
+            damaged = true;
+        }
     }
 
     public void Unfreeze()
     {
         agent.isStopped = false;
         SoundManager.instance.PlayWitchSound(laughSound, transform.position);
+        damaged = false;
     }
 
     public void Die()

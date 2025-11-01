@@ -1,13 +1,15 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
     public Camera cam;
     public Animator animator;
-    public float runSpeed;
+    public int runSpeed;
     public float turnSpeed;
+    bool damaged = false;
+    float inflictDamageTimer = 9.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,27 +27,76 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDirection = new Vector3(horizontal, 0.0f, vertical);
         moveDirection.Normalize();
         
-        if (moveDirection != Vector3.zero)
+        if (moveDirection != Vector3.zero && CanMove())
         {
             moveDirection = Quaternion.AngleAxis(cam.transform.rotation.eulerAngles.y, Vector3.up) * moveDirection;
             Quaternion toRotation = Quaternion.LookRotation(new Vector3(moveDirection.x, 0.0f, moveDirection.z));
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * 100.0f * Time.deltaTime);
-            animator.SetBool("run", true);
+
+            switch(runSpeed)
+            {
+                case 50:
+                    animator.SetBool("run", true);
+                    break;
+                case 15:
+                    animator.SetBool("walk", true);
+                    break;
+            }
         }
         else
         {
             animator.SetBool("run", false);
+            animator.SetBool("walk", false);
         }
 
         moveDirection.y = -9.8f;
 
         moveDirection.Normalize();
 
-        controller.Move(moveDirection * runSpeed * Time.deltaTime);
+        if(CanMove())
+            controller.Move(moveDirection * runSpeed * Time.deltaTime);
+    }
+
+    public void TakeDamage()
+    {
+        if(!damaged && inflictDamageTimer == 9.0f)
+        {
+            damaged = true;
+            animator.SetBool("damaged", true);
+            runSpeed = 15;
+            StartCoroutine(InvisibiltyPeriod());
+        }
+    }
+
+    IEnumerator InvisibiltyPeriod()
+    {
+        while (inflictDamageTimer > 0)
+        {
+            inflictDamageTimer -= Time.deltaTime;
+            yield return null;
+        }
+
+        inflictDamageTimer = 9.0f;
+    }
+
+    public void Heal()
+    {
+        damaged = false;
+        animator.SetBool("damaged", false);
+    }
+
+    public void SetPlayerSpeed(int speed)
+    {
+        runSpeed = speed;
+    }
+
+    public int GetPlayerSpeed()
+    {
+        return runSpeed;
     }
 
     bool CanMove()
     {
-        return controller.isGrounded;
+        return !damaged;
     }
 }

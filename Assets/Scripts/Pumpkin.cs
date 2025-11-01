@@ -21,7 +21,7 @@ public class Pumpkin : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             Vector2 direction = transform.position - player.transform.position;
-            rb.AddForce(direction * 500);
+            rb.AddForce(direction * 10 * player.GetComponent<PlayerMovement>().GetPlayerSpeed());
             StartCoroutine(TrackMovement());
         }
         
@@ -43,15 +43,16 @@ public class Pumpkin : MonoBehaviour
         if(witchObject)
         {
             witch = witchObject.GetComponent<Witch>();
-            float pumpkinExplosionRadius = Vector3.Distance(witchObject.transform.position, player.transform.position);
+            float pumpkinExplosionRadius = Vector3.Distance(witchObject.transform.position, transform.position);
 
             Debug.Log(pumpkinExplosionRadius);
 
-            if (pumpkinExplosionRadius < 10.0f)
+            if (pumpkinExplosionRadius < 4.5f)
                 witch.TakeDamage();
         }
 
         ParticleSystem magicSmoke = Instantiate(magicSmoke_Instance, transform.position, Quaternion.identity);
+        magicSmoke.transform.localScale *= 1.3f;
         Destroy(magicSmoke, magicSmoke.main.duration);
         SoundManager.instance.PlaySound(fireworkSounds[Random.Range(0, fireworkSounds.Length)], transform.position, 1.0f);
         PumpkinSpawner.instance.CanSpawnPumpkin();
