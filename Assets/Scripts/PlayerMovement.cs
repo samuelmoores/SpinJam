@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
     public Camera cam;
     public Animator animator;
+    public GameOver gameOver;
     public int runSpeed;
     public float turnSpeed;
     bool damaged = false;
@@ -41,12 +42,16 @@ public class PlayerMovement : MonoBehaviour
                 case 15:
                     animator.SetBool("walk", true);
                     break;
+                case 10:
+                    animator.SetBool("hurtWalk", true);
+                    break;
             }
         }
         else
         {
             animator.SetBool("run", false);
             animator.SetBool("walk", false);
+            animator.SetBool("hurtWalk", false);
         }
 
         moveDirection.y = -9.8f;
@@ -63,7 +68,20 @@ public class PlayerMovement : MonoBehaviour
         {
             damaged = true;
             animator.SetBool("damaged", true);
-            runSpeed = 15;
+            switch(runSpeed)
+            {
+                case 50:
+                    runSpeed = 15;
+                    break;
+                case 15:
+                    runSpeed = 10;
+                    break;
+                case 10:
+                    animator.SetBool("dead", true);
+                    damaged = true;
+                    break;
+            }
+                
             StartCoroutine(InvisibiltyPeriod());
         }
     }
@@ -98,5 +116,10 @@ public class PlayerMovement : MonoBehaviour
     bool CanMove()
     {
         return !damaged;
+    }
+
+    public void StartGameOver()
+    {
+        gameOver.FadeToBlack();
     }
 }

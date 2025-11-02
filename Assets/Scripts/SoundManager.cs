@@ -44,19 +44,7 @@ public class SoundManager : MonoBehaviour
     public void StopLoopingSound()
     {
         if (loopingSound)
-            StartCoroutine(FadeOutSound());
-    }
-
-    IEnumerator FadeOutSound()
-    {
-        AudioSource source = loopingSound.GetComponent<AudioSource>();
-
-        while (source && source.volume > 0.0f)
-        {
-            source.volume -= Time.deltaTime;
-            yield return null;
-        }
-        Destroy(loopingSound);
+            StartCoroutine(FadeOutSound(loopingSound));
     }
 
     public void PlayWitchSound(AudioClip clip, Vector3 position)
@@ -72,6 +60,18 @@ public class SoundManager : MonoBehaviour
 
     public void StopWitchSound()
     {
-        witchSound.GetComponent<AudioSource>().Stop();
+        StartCoroutine(FadeOutSound(witchSound.gameObject, 0.25f));
+
+    }
+    IEnumerator FadeOutSound(GameObject sound, float speed = 1.0f)
+    {
+        AudioSource source = sound.GetComponent<AudioSource>();
+
+        while (source && source.volume > 0.0f)
+        {
+            source.volume -= Time.deltaTime * speed;
+            yield return null;
+        }
+        Destroy(loopingSound);
     }
 }
