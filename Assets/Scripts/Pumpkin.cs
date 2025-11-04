@@ -31,10 +31,26 @@ public class Pumpkin : MonoBehaviour
     IEnumerator TrackMovement()
     {
         float current = 0.0f;
+        float flashInterval = 0.1f;
+        float flashTimer = 0.0f;
+        bool visible = true;
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
 
-        while(current < 0.5f)
+        while(current < 1.0f)
         {
             current += Time.deltaTime;
+            flashTimer += Time.deltaTime;
+            transform.localScale += new Vector3(Time.deltaTime * 3, Time.deltaTime * 3, Time.deltaTime  * 3);
+
+            // handle flashing
+            if (flashTimer > flashInterval)
+            {
+                visible = !visible;
+                renderer.enabled = visible; // toggle visibility
+                flashTimer = 0.0f;
+            }
+
+            //TODO: homing missile
 
             yield return null;
         }
@@ -45,8 +61,6 @@ public class Pumpkin : MonoBehaviour
         {
             witch = witchObject.GetComponent<Witch>();
             float pumpkinExplosionRadius = Vector3.Distance(witchObject.transform.position, transform.position);
-
-            Debug.Log(pumpkinExplosionRadius);
 
             if (pumpkinExplosionRadius < 7.5f)
                 witch.TakeDamage();
