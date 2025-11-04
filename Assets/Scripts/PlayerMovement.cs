@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public int runSpeed;
     public float turnSpeed;
     bool damaged = false;
+    bool dead = false;
     float inflictDamageTimer = 9.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -78,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
                     break;
                 case 10:
                     animator.SetBool("dead", true);
-                    damaged = true;
+                    dead = true;
                     break;
             }
                 
@@ -99,8 +100,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void Heal()
     {
-        damaged = false;
-        animator.SetBool("damaged", false);
+        if(!dead)
+        {
+            damaged = false;
+            animator.SetBool("damaged", false);
+            animator.SetBool("walk", false);
+        }
     }
 
     public void SetPlayerSpeed(int speed)
@@ -115,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool CanMove()
     {
-        return !damaged;
+        return !damaged && !dead;
     }
 
     public void StartGameOver()
